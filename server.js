@@ -9,7 +9,7 @@ const reservationsRoutes = require('./routes/reservations');
 
 // ✅ Fix CORS Configuration
 const corsOptions = {
-    origin: ['http://localhost', 'http://localhost:8081', 'http://127.0.0.1:8081/'], // Allow multiple origins
+    origin: ['http://localhost', 'http://localhost:8081', 'http://192.168.1.227:8081'], // Allow multiple origins 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };

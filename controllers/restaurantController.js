@@ -63,3 +63,23 @@ exports.deleteRestaurant = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+
+exports.searchRestaurant = async (req, res) => {
+    const { q } = req.query;
+
+    if (!q || q.trim() === '') {
+        return res.status(400).json({ error: 'Search query is required' });
+    }
+
+    try {
+        const searchTerm = `%${q}%`;
+        const [results] = await db.query(
+            'SELECT * FROM restaurants WHERE name LIKE ? OR location LIKE ? OR description LIKE ?',
+            [searchTerm, searchTerm, searchTerm]
+        );
+        res.json(results);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

@@ -65,6 +65,7 @@ exports.loginUser = async (req, res) => {
           id: user.user_id,
           email: user.email,
           name: user.name, // optional if you store name
+          root_admin :user.root_admin
         }
       });
   
@@ -84,9 +85,21 @@ exports.getUsers = async (req, res) => {
     }
 };
 
+
+// Get all users (as before)
+exports.getUser = async (req, res) => {
+  const { user_id } = req.params;
+  try {
+      const [users] = await db.execute('SELECT * FROM users WHERE user_id = ? ', [user_id]);
+      res.json(users);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
+
 // Update user (as before)
 exports.updateUser = async (req, res) => {
-    const { id } = req.params;
+    const { user_id } = req.params;
     const { name, email } = req.body;
 
     if (!name || !email) {
@@ -95,8 +108,8 @@ exports.updateUser = async (req, res) => {
 
     try {
         await db.execute(
-            'UPDATE users SET name = ?, email = ? WHERE id = ?',
-            [name, email, id]
+            'UPDATE users SET name = ?, email = ? WHERE user_id = ?',
+            [name, email, user_id]
         );
         res.json({ message: "User updated successfully!" });
     } catch (error) {
